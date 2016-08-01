@@ -1,20 +1,21 @@
 #!/usr/bin/env python
 
 from distutils.core import setup as distutils_setup
-from os import walk, getcwd
+from os import walk
 from os.path import isfile, join as path_join
 from shutil import move
 from subprocess import Popen, PIPE
 from sys import argv, platform
 from tarfile import open as tarfile_open
+from tempfile import gettempdir
 from urllib import urlretrieve
 
 
 def setup():
     try:
-        temp_dir = getcwd()
+        temp_dir = gettempdir()
 
-        if not isfile('{}/install.lock'.format(temp_dir)):
+        if not isfile('{}/waspc.lock'.format(temp_dir)):
             zlib_arch = 'zlib-1.2.8.tar.gz'
             openssl_arch = 'openssl-1.0.2a.tar.gz'
             nassl_dir = '{}/nassl.downloaded'.format(temp_dir)
@@ -33,7 +34,7 @@ def setup():
 
             move(nassl_build_dir, "{}/nassl".format(temp_dir))
 
-            file('{}/install.lock'.format(temp_dir), 'w').close()
+            file('{}/waspc.lock'.format(temp_dir), 'w').close()
 
         NASSL_BINARY = '_nassl.so'
         if platform == 'win32':
