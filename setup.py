@@ -13,24 +13,28 @@ from urllib import urlretrieve
 
 def setup():
     try:
-        build_dir = getcwd()
-        zlib_arch = 'zlib-1.2.8.tar.gz'
-        openssl_arch = 'openssl-1.0.2a.tar.gz'
-        nassl_dir = '{}/nassl.downloaded'.format(build_dir)
-        nassl_build_dir = ''
+        lock_dir = build_dir= gettempdir()
 
-        Popen(['git', 'clone', 'https://github.com/ZenSecurity/nassl.git', nassl_dir]).wait()
-        urlretrieve('http://zlib.net/{}'.format(zlib_arch), '{}/{}'.format(nassl_dir, zlib_arch))
-        tarfile_open('{}/{}'.format(nassl_dir, zlib_arch)).extractall(nassl_dir)
-        urlretrieve('http://www.openssl.org/source/old/1.0.2/{}'.format(openssl_arch), '{}/{}'.format(nassl_dir, openssl_arch))
-        tarfile_open('{}/{}'.format(nassl_dir, openssl_arch)).extractall(nassl_dir)
-        Popen(['python', 'buildAll_unix.py'], cwd=nassl_dir).wait()
+        if not isfile('{}/waspc.lock'.format(lock_dir)):
+            zlib_arch = 'zlib-1.2.8.tar.gz'
+            openssl_arch = 'openssl-1.0.2a.tar.gz'
+            nassl_dir = '{}/nassl.downloaded'.format(build_dir)
+            nassl_build_dir = ''
 
-        for root, dirs, files in walk('{}/build'.format(nassl_dir)):
-            if 'nassl' in dirs:
-                nassl_build_dir = path_join(root, 'nassl')
+            Popen(['git', 'clone', 'https://github.com/ZenSecurity/nassl.git', nassl_dir]).wait()
+            urlretrieve('http://zlib.net/{}'.format(zlib_arch), '{}/{}'.format(nassl_dir, zlib_arch))
+            tarfile_open('{}/{}'.format(nassl_dir, zlib_arch)).extractall(nassl_dir)
+            urlretrieve('http://www.openssl.org/source/old/1.0.2/{}'.format(openssl_arch), '{}/{}'.format(nassl_dir, openssl_arch))
+            tarfile_open('{}/{}'.format(nassl_dir, openssl_arch)).extractall(nassl_dir)
+            Popen(['python', 'buildAll_unix.py'], cwd=nassl_dir).wait()
 
-        move(nassl_build_dir, "{}/nassl".format(build_dir))
+            for root, dirs, files in walk('{}/build'.format(nassl_dir)):
+                if 'nassl' in dirs:
+                    nassl_build_dir = path_join(root, 'nassl')
+
+            move(nassl_build_dir, "{}/nassl".format(build_dir))
+
+            file('{}/waspc.lock'.format(lock_dir), 'w').close()
 
         NASSL_BINARY = '_nassl.so'
         if platform == 'win32':
