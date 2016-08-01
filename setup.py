@@ -7,13 +7,12 @@ from shutil import move
 from subprocess import Popen, PIPE
 from sys import argv, platform
 from tarfile import open as tarfile_open
-from tempfile import gettempdir
 from urllib import urlretrieve
 
 
 def setup():
     try:
-        lock_dir = build_dir = gettempdir()
+        lock_dir = build_dir = getcwd()
 
         if not isfile('{}/waspc.lock'.format(lock_dir)):
             zlib_arch = 'zlib-1.2.8.tar.gz'
