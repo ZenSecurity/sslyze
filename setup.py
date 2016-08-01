@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup as distutils_setup
-from os import walk, getcwd
+from os import getcwd, walk
 from os.path import isfile, join as path_join
 from shutil import move
 from subprocess import Popen, PIPE
