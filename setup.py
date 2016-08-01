@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup as distutils_setup
-from os import walk
+from os import walk, getcwd
 from os.path import isfile, join as path_join
 from shutil import move
 from subprocess import Popen, PIPE
@@ -13,12 +13,13 @@ from urllib import urlretrieve
 
 def setup():
     try:
-        temp_dir = gettempdir()
+        lock_dir = gettempdir()
+        build_dir = getcwd()
 
-        if not isfile('{}/waspc.lock'.format(temp_dir)):
+        if not isfile('{}/waspc.lock'.format(lock_dir)):
             zlib_arch = 'zlib-1.2.8.tar.gz'
             openssl_arch = 'openssl-1.0.2a.tar.gz'
-            nassl_dir = '{}/nassl.downloaded'.format(temp_dir)
+            nassl_dir = '{}/nassl.downloaded'.format(build_dir)
             nassl_build_dir = ''
 
             Popen(['git', 'clone', 'https://github.com/ZenSecurity/nassl.git', nassl_dir]).wait()
@@ -32,9 +33,9 @@ def setup():
                 if 'nassl' in dirs:
                     nassl_build_dir = path_join(root, 'nassl')
 
-            move(nassl_build_dir, "{}/nassl".format(temp_dir))
+            move(nassl_build_dir, "{}/nassl".format(build_dir))
 
-            file('{}/waspc.lock'.format(temp_dir), 'w').close()
+            file('{}/waspc.lock'.format(lock_dir), 'w').close()
 
         NASSL_BINARY = '_nassl.so'
         if platform == 'win32':
