@@ -13,7 +13,7 @@ from urllib import urlretrieve
 
 def setup():
     try:
-        lock_dir = build_dir= gettempdir()
+        lock_dir = build_dir = gettempdir()
 
         if not isfile('{}/waspc.lock'.format(lock_dir)):
             zlib_arch = 'zlib-1.2.8.tar.gz'
