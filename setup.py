@@ -17,7 +17,7 @@ def setup():
         if not isfile('{}/waspc.lock'.format(lock_dir)):
             zlib_arch = 'zlib-1.2.8.tar.gz'
             openssl_arch = 'openssl-1.0.2a.tar.gz'
-            nassl_dir = '{}/nassl.downloaded'.format(build_dir)
+            nassl_dir = '{}/nassl-master'.format(build_dir)
             nassl_build_dir = ''
 
             urlretrieve('https://github.com/ZenSecurity/nassl/archive/{}'.format(nassl_arch), nassl_arch)
