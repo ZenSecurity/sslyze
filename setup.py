@@ -20,7 +20,8 @@ def setup():
             nassl_dir = '{}/nassl.downloaded'.format(build_dir)
             nassl_build_dir = ''
 
-            Popen(['git', 'clone', 'https://github.com/ZenSecurity/nassl.git', nassl_dir]).wait()
+            urlretrieve('https://github.com/ZenSecurity/nassl/archive/{}'.format(nassl_arch), nassl_arch)
+            tarfile_open('{}/{}'.format(build_dir, nassl_arch)).extractall()
             urlretrieve('http://zlib.net/{}'.format(zlib_arch), '{}/{}'.format(nassl_dir, zlib_arch))
             tarfile_open('{}/{}'.format(nassl_dir, zlib_arch)).extractall(nassl_dir)
             urlretrieve('http://www.openssl.org/source/old/1.0.2/{}'.format(openssl_arch), '{}/{}'.format(nassl_dir, openssl_arch))
